@@ -1,10 +1,35 @@
 // BUILD YOUR SERVER HERE
 const express = require('express')
-
+const user = require('./users/model')
 const server = express()
 
 server.get('/api/users', (req,res) => {
-    res.json('users')
+    user.find()
+        .then(users => {
+            res.json(users)
+
+        })
+        .catch(err => {
+          res.status(500).json({
+              message: 'error getting users',
+              err: err.message,
+          })
+        })
+
+})
+
+server.get('/api/users/:id', (req,res) => {
+    user.findById(req.params.id)
+        .then(user => {
+            res.json(user)
+
+        })
+        .catch(err => {
+            res.status(500).json({
+                message: 'error getting user',
+                err: err.message,
+            })
+        })
 
 })
 
